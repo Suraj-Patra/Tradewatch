@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
+import { CaretDownFill } from 'react-bootstrap-icons';
+import { CaretUpFill } from 'react-bootstrap-icons';
 import finnHub from '../apis/finnHub';
 
 export const StockList = () => {
 	const [stock, set_stock] = useState();
 	const [watch_list, set_watch_list] = useState(['GOOGL', 'MSFT', 'AMZN']);
+
 
 	useEffect(() => {
 		let isMounted = true;
@@ -52,15 +55,23 @@ export const StockList = () => {
 				</thead>
 				<tbody>
 					{
-						// For the first time when the component gets rendered, the stock will be undefined. So we are putting a condition to check if it gets the value or not
+						// For the first time, when the component gets rendered, the stock will be undefined. So we are putting a condition to check if it gets the value or not
 						stock && 
 						stock.map((stockData) => {
 							return (
 								<tr className='table-row' key={stockData.symbol}>
 									<th scope='row'>{stockData.symbol}</th>
 									<td>{stockData.data.c}</td>
-									<td>{stockData.data.d}</td>
-									<td>{stockData.data.dp}</td>
+									<td className={`text-${stockData.data.d>0? 'success':'danger'}`}
+									>
+										{stockData.data.d}
+										{stockData.data.d>0?<CaretUpFill />:<CaretDownFill />}
+									</td>
+									<td className={`text-${stockData.data.d>0? 'success':'danger'}`}
+									>
+										{stockData.data.dp}
+										{stockData.data.dp>0?<CaretUpFill />:<CaretDownFill />}
+									</td>
 									<td>{stockData.data.h}</td>
 									<td>{stockData.data.l}</td>
 									<td>{stockData.data.o}</td>
@@ -74,3 +85,4 @@ export const StockList = () => {
 		</div>
 	)
 }
+
